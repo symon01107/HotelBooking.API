@@ -21,7 +21,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<HotelBookingDBContext>(
-    options => options.UseSqlServer(@"Server=DESKTOP-2N12RI0\MSSQLSERVER01;TrustServerCertificate=True;Persist Security Info=True;Database=HotelBooking;Trusted_Connection=True"));
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<IHotelInformationService,HotelInformationService>();
 builder.Services.AddTransient<IBookingService,BookingService>();

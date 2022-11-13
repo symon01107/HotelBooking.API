@@ -4,7 +4,7 @@ namespace HotelBooking.API.ViewModels
 {
     public class PagedHotelInformation
     {
-        public IEnumerable<HotelInfoVM> hotelInfoVMs { get; set; }
+        public IEnumerable<HotelInfoVM> HotelInfo { get; set; }
         public PaginInfoVM PagingInfo { get; set; }
     }
 
@@ -12,12 +12,14 @@ namespace HotelBooking.API.ViewModels
     {
         public int HotelId { get; set; }
         public string HotelName { get; set; }
+        public string Address { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
         public double HotelRating { get; set; }
         public int ReviewCount { get; set; }
         public string Description { get; set; }
         public ICollection<HotelFacilitiesVM> Facilities { get; set; }
 
-        public ICollection<HotelBookingInfo> HotelBookings { get; set; }
         public decimal CostPerNight { get; set; }
     }
 

@@ -24,6 +24,9 @@ namespace HotelBooking.API.Repositories
                           {
                               HotelId = w.Id,
                               Description = w.Description,
+                              Address = w.Address,
+                              Latitude = w.Latitude,
+                              Longitude = w.Longitude,
                               HotelName = w.HotelName,
                               HotelRating = Math.Ceiling(w.HotelRatings.Select(s => s.Rating).Average()),
                               ReviewCount = w.HotelReviews.Count(),
@@ -44,6 +47,9 @@ namespace HotelBooking.API.Repositories
                         {
                             HotelId = w.Id,
                             Description = w.Description,
+                            Longitude = w.Longitude,
+                            Latitude = w.Latitude,
+                            Address = w.Address,
                             HotelName = w.HotelName,
                             HotelRating = Math.Ceiling(w.HotelRatings.Select(s => s.Rating).Average()),
                             ReviewCount = w.HotelReviews.Count(),
@@ -55,15 +61,15 @@ namespace HotelBooking.API.Repositories
             if (!string.IsNullOrEmpty(hotelSearch.SearchText) && hotelSearch.CheckInDate.HasValue && hotelSearch.CheckoutDate.HasValue)
             {
                 data = from w in data.Where(w => w.HotelName.Contains(hotelSearch.SearchText))
-                           //from booking in context.HotelBookings.Where(b => b.HotelInformationId == w.HotelId).DefaultIfEmpty()
-                           // where hotelSearch.CheckInDate.Value > booking.CheckInDate
                        select w;
 
             }
 
             return new PagedHotelInformation
             {
-                hotelInfoVMs = data.OrderByDescending(w => w.HotelRating).Skip((hotelSearch.PageNumber - 1) * hotelSearch.PageSize),
+                HotelInfo = data.OrderByDescending(w => w.HotelRating)
+                               .Skip((hotelSearch.PageNumber - 1) * hotelSearch.PageSize)
+                               .Take(hotelSearch.PageSize),
                 PagingInfo = new PaginInfoVM
                 {
                     PageNumber = hotelSearch.PageNumber,
