@@ -18,12 +18,12 @@ namespace HotelBooking.API.Repositories
         public async Task<bool> BookRoom(HotelBookingRequestVM hotelBookingRequest)
         {
             var emptyRooms = await context.RoomInfos
-                            .Include(w=>w.HotelInformation)
+                            .Include(w => w.HotelInformation)
                             .Include(w => w.HotelBookingInfos)
-                            .Where(w => w.HotelInformationId==hotelBookingRequest.HotelId && !w.HotelBookingInfos
-                                        .Any(s => (hotelBookingRequest.CheckInDate >= s.CheckInDate && hotelBookingRequest.CheckoutDate<=s.CheckOutDate)
-                                               //&& (hotelBookingRequest.CheckoutDate >= s.CheckInDate && hotelBookingRequest.CheckoutDate <= s.CheckOutDate) 
-                                                   )) 
+                            .Where(w => w.HotelInformationId == hotelBookingRequest.HotelId &&
+                                         !w.HotelBookingInfos.Any(s => (hotelBookingRequest.CheckInDate >= s.CheckInDate && hotelBookingRequest.CheckInDate <= s.CheckOutDate)
+                                                && (hotelBookingRequest.CheckoutDate >= s.CheckInDate && hotelBookingRequest.CheckoutDate <= s.CheckOutDate)
+                                                   ))
                             .ToListAsync();
 
             if (emptyRooms.Any())
@@ -35,11 +35,11 @@ namespace HotelBooking.API.Repositories
                     CheckInDate = hotelBookingRequest.CheckInDate,
                     CheckOutDate = hotelBookingRequest.CheckoutDate,
                     CostPerNight = emptyRooms.FirstOrDefault().HotelInformation.CostPerNight,
-                    CreatedBy="Get UserId from Token",
-                    CreatedDate=DateTime.UtcNow,
-                    UpdatedBy= "Get UserId from Token",
+                    CreatedBy = "Get UserId from Token",
+                    CreatedDate = DateTime.UtcNow,
+                    UpdatedBy = "Get UserId from Token",
                     RoomInfoId = emptyRooms.FirstOrDefault().Id,
-                    UpdatedDate=DateTime.UtcNow
+                    UpdatedDate = DateTime.UtcNow
                 };
 
                 await context.HotelBookings.AddAsync(hotelBooking);

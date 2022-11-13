@@ -41,7 +41,8 @@ namespace HotelBooking.API.Repositories
             var data = (from w in context.Hotels.Include(w => w.HotelFacilities).ThenInclude(s => s.Feature)
                                             .Include(w => w.HotelRatings)
                                             .Include(w => w.HotelReviews)
-
+                                            .Include(w => w.Rooms).ThenInclude(w => w.HotelBookingInfos)
+                                            
 
                         select new HotelInfoVM
                         {
@@ -58,7 +59,7 @@ namespace HotelBooking.API.Repositories
                         }).AsNoTracking().AsQueryable();
 
 
-            if (!string.IsNullOrEmpty(hotelSearch.SearchText) && hotelSearch.CheckInDate.HasValue && hotelSearch.CheckoutDate.HasValue)
+            if (!string.IsNullOrEmpty(hotelSearch.SearchText))
             {
                 data = from w in data.Where(w => w.HotelName.Contains(hotelSearch.SearchText))
                        select w;
